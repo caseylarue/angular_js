@@ -1,0 +1,46 @@
+<html ng-app='myApp'> <!-- ng-app is a directive -->
+    <head>
+      	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"/></script>
+      	<script type='text/javascript'>
+          // build module
+          var myAppModule = angular.module('myApp', []);
+          // add a factory to the module
+          myAppModule.factory('studentFactory', function (){
+              // a factory is nothing more than a function that returns an object literal!
+              var students = [
+                  {name: 'Mike', age: 34},
+                  {name: 'John', age: 24},
+                  {name: 'Trey', age: 24}];
+              var factory = {};
+              // add a getstudents method to the object we defined
+              factory.getStudents = function (callback){
+                  // pass the students to a callback to be used by whoever calls the method
+                  callback(students);
+              }
+              // most important step: return the object so it can be used by the rest of our angular code
+              return factory
+          });
+          // now build the controller and inject the studentFactory into it!
+          myAppModule.controller('studentsController', function ($scope, studentFactory){
+              //  initialize an empty array so $scope.students maintains a consistent data type
+              $scope.students = [];
+              // run the getStudents method and set $scope data in the callback
+              studentFactory.getStudents(function (data){
+                  $scope.students = data;
+              })
+          })	
+   		</script>
+    </head>
+    <body>
+    	<div ng-controller='studentsController'>
+    		<ul>
+    			<li ng-repeat='student in students'>{{ student.name }}, {{ student.age }}</li>
+    		</ul>
+	    	<form>
+	    		Name: <input type="text" ng-model="newStudent.name">
+	    		Age: <input type="text" ng-model="newStudent.age">
+	    		<input ng-click='addStudent()' type='submit' value='add student'>
+    		</form>
+    	</div>
+    </body>
+</html>

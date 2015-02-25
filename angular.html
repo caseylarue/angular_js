@@ -1,0 +1,33 @@
+<html ng-app='myApp'> <!-- ng-app is a directive -->
+    <head>
+      	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"/></script>
+      	<script type='text/javascript'>
+      		var myApp = angular.module('myApp', []);
+
+      		myApp.controller('studentsController', function ($scope){
+      			$scope.students = [
+      				{name: 'Trey', age: 24},
+      				{name: 'Andres', age: 22},
+      				{name: 'Michael', age: 34}
+      			]
+      			// use form data to add a new student to the scope method
+      			$scope.addStudent = function(){
+      				$scope.students.push($scope.newStudent);
+      				$scope.newStudent = {};
+      			}
+      		})	
+   		</script>
+    </head>
+    <body>
+    	<div ng-controller='studentsController'>
+    		<ul>
+    			<li ng-repeat='student in students'>{{ student.name }}, {{ student.age }}</li>
+    		</ul>
+	    	<form>
+	    		Name: <input type="text" ng-model="newStudent.name">
+	    		Age: <input type="text" ng-model="newStudent.age">
+	    		<input ng-click='addStudent()' type='submit' value='add student'>
+    		</form>
+    	</div>
+    </body>
+</html>
