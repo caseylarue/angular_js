@@ -50,11 +50,23 @@
 	    		$scope.customers = data;
 	    	})
 
-	    	$scope.addCustomer = function(){
-	    		customerFactory.addCustomer($scope.newCustomer, function(data){
-	    			$scope.customers = data;
-	    			$scope.newCustomer = {};
-	    		})
+	    	$scope.addCustomer = function(name){
+	    		for(var i=0; i<$scope.customers.length; i++){
+	    				console.log($scope.customers[i].name);
+	    				console.log("new_customer", $scope.newCustomer.name);
+	    			if($scope.customers[i].name === $scope.newCustomer.name){
+	    				console.log("we have a match!")
+	    				break;
+	    			}
+	    			else {
+	    				console.log("no match! and post to table!");
+    					customerFactory.addCustomer($scope.newCustomer, function(data){
+		    				$scope.customers = data;
+		    				$scope.newCustomer = {};
+			    		})
+			    		break;
+	    			}		
+	    		}
 	    	}
 
 	    	$scope.removeCustomer = function(customer){
@@ -98,8 +110,8 @@
 		<h2>Add a new customer</h2>
 
 		<label>Customer Name:</label>
-		<input type='text' ng-model="filter_name" ng-model="newCustomer.name">
-		<input ng-click='addCustomer()' type='submit' value='add' >
+		<input type='text' ng-model="newCustomer.name">
+		<input ng-click='addCustomer(name)' type='submit' value='add' >
 
 		Search Customers:<input ng-model="filter_name" type='text' placeholder='search name..'>
 
