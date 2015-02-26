@@ -26,7 +26,7 @@
           $scope.newFriend = {};
         }
 
-         $scope.removeFriend = function(friend){
+        $scope.removeFriend = function(friend){
           $scope.friends.splice($scope.friends.indexOf(friend), 1);
         }
 
@@ -39,6 +39,7 @@
 <body ng-app='myApp'>
     <div ng-controller='friendsController'>
       Search Friends: <input type="text" ng-model="filter_name">
+
       <ul>
         <li ng-repeat="friend in friends | filter:filter_name | orderBy: 'name' ">
           {{ friend.name }} - age {{ friend.age }}, gender {{ friend.gender | uppercase }}
@@ -46,6 +47,7 @@
           <!-- <a href="#" ng-click="removeFriend($index)">delete</a> -->
         </li>
       </ul>
+
       <h2>Add new friend:</h2>
       Name:<input type='text' ng-model='newFriend.name'>
       Gender:<select ng-model='newFriend.gender'>
