@@ -1,0 +1,122 @@
+<html>
+<head>
+	<title>To Do</title>
+	<style type="text/css">
+		thead td {
+			font-weight: bold;
+		}
+		td {
+			margin: 10px;
+			padding: 10px;
+		}
+	</style>
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js'></script>
+  	<script type='text/javascript'>
+	    var myApp = angular.module('myApp', []);
+
+	    myApp.factory('customerFactory', function () {
+	    	var customers = [
+		  			{name:'Michael', created_at: Date.now()},
+		  			{name:'Debbie', created_at: Date.now()},
+		  			{name:'Jason', created_at: Date.now()}];
+		  	var factory = {};
+
+		  	factory.getCustomers = function (callback){
+		  		callback(customers);
+		  	}
+
+		  	factory.addCustomer = function(info, callback){
+		  		info.created_at = Date.now();
+	  			customers.push(info);
+	  			callback(customers);
+		  	}
+
+		  	factory.removeCustomer = function(info, callback){
+		  		console.log("customers", customers);
+		  		console.log("info", info);
+		  		customers.splice(customers.indexOf(info), 1);
+		  	}
+
+		  	return factory
+	    });
+
+
+
+	    myApp.controller('customersController', function ($scope, customerFactory){
+	    	
+	    	$scope.customers = [];
+
+	    	customerFactory.getCustomers(function (data){
+	    		$scope.customers = data;
+	    	})
+
+	    	$scope.addCustomer = function(){
+	    		customerFactory.addCustomer($scope.newCustomer, function(data){
+	    			$scope.customers = data;
+	    			$scope.newCustomer = {};
+	    		})
+	    	}
+
+	    	$scope.removeCustomer = function(customer){
+	    		customerFactory.removeCustomer(customer, function(data){
+	    			$scope.customers = data;
+	    		})
+	    	}
+	    })
+
+
+
+
+	  	
+	  	// myApp.controller('customersController', function ($scope){
+		  // 		$scope.customers = [
+		  // 			{name:'Michael', created_at: Date.now()},
+		  // 			{name:'Debbie', created_at: Date.now()},
+		  // 			{name:'Jason', created_at: Date.now()}
+		  // 		]
+
+		  // 		console.log($scope.customers);
+
+		  // 		$scope.removeCustomer = function(customer){
+		  // 			$scope.customers.splice($scope.customers.indexOf(customer), 1);
+		  // 		}
+
+		  // 		$scope.addCustomer = function(){
+		  // 			$scope.newCustomer.created_at = Date.now();
+		  // 			$scope.customers.push($scope.newCustomer);
+		  // 			$scope.newFriend = {};
+		  // 		}
+	  	// 	})
+
+
+
+  	</script>
+</head>
+<body ng-app='myApp'>
+	<div ng-controller='customersController'>
+		<h1>Welcome to our Customer Page!</h1>
+		<h2>Add a new customer</h2>
+
+		<label>Customer Name:</label>
+		<input type='text' ng-model="filter_name" ng-model="newCustomer.name">
+		<input ng-click='addCustomer()' type='submit' value='add' >
+
+		Search Customers:<input ng-model="filter_name" type='text' placeholder='search name..'>
+
+		<table>
+			<thead>
+				<td>Customer Name</td>
+				<td>Created Date</td>
+				<td>Actions</td>
+			</thead>
+			<tbody ng-repeat="customer in customers | filter:filter_name | orderBy:'created_at' ">
+				<tr>
+					<td><span ng-bind="customer.name"></span></td>
+					<td><span ng-bind="customer.created_at | date:'MM/dd/yyyy' "></span></td>
+					<td><button> <a href="#" ng-click="removeCustomer(customer)">delete</a></button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
